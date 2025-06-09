@@ -6,6 +6,7 @@ import type { Env } from "src/env";
 
 @Module({
   imports: [
+    PassportModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       global: true,
@@ -20,7 +21,6 @@ import type { Env } from "src/env";
         };
       },
     }),
-    PassportModule,
   ],
 })
 export class AuthModule {}

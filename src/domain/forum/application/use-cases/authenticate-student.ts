@@ -1,0 +1,56 @@
+import { Either, left, right } from "@/core/either"
+import { Encrypter } from "../cryptography/encrypter"
+import { HashComparer } from "../cryptography/hash-comparer"
+import { StudentsRepository } from "../repositories/students-repository"
+import { StudentAlreadyExistsError } from "./errors/student-already-exists.error"
+import { WrongCredentialsError } from "./errors/wrong-credentials.error"
+
+// EXTERNAL DEPENDENCY
+import { Injectable } from "@nestjs/common"
+
+interface AuthenticateStudentUseCaseRequest {
+  email: string
+  password: string
+}
+
+type AuthenticateStudentUseCaseResponse = Either<
+  WrongCredentialsError,
+  {
+    accessToken: string
+  }
+>
+
+@Injectable()
+export class AuthenticateStudentUseCase {
+  constructor(
+    private studentsRepository: StudentsRepository,
+    private hashComparer: HashComparer,
+    private encrypter: Encrypter,
+  ) {}
+
+  async execute({
+    email,
+    password,
+  }: AuthenticateStudentUseCaseRequest): Promise<AuthenticateStudentUseCaseResponse> {
+    const student = await this.studentsRepository.findByEmail(email)
+
+    if (!student) {
+      return left(new StudentAlreadyExistsError(email))
+    }
+
+    const isPasswordValid = await this.hashComparer.compare(
+      password,
+      student.password,
+    )
+
+    if (!isPasswordValid) {
+      return left(new WrongCredentialsError())
+    }
+
+    const accessToken = await this.encrypter.encrypt({
+      sub: student.id.toString(),
+    })
+
+    return right({ accessToken })
+  }
+}

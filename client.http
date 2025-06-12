@@ -6,9 +6,9 @@ POST {{BASE_URL}}/accounts
 Content-Type: application/json
 
 {
-  "name": "newuser",
-  "password": "securepassword",
-  "email": "newuser@mail.com"
+  "name": "John Doe",
+  "email": "johndoe@example.com",
+  "password": "123456"
 }
 
 ###

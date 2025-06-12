@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
-import { JwtModule } from '@nestjs/jwt'
-import { PassportModule } from '@nestjs/passport'
-import { Env } from '@/infra/env'
-import { JWTStrategy } from './jwt.strategy'
+import { Module } from "@nestjs/common"
+import { ConfigService } from "@nestjs/config"
+import { JwtModule } from "@nestjs/jwt"
+import { PassportModule } from "@nestjs/passport"
+import { Env } from "@/infra/env"
+import { JWTStrategy } from "./jwt.strategy"
+import { APP_GUARD } from "@nestjs/core"
+import { JWTAuthGuard } from "./jwt-auth.guard"
 
 @Module({
   imports: [
@@ -12,17 +14,23 @@ import { JWTStrategy } from './jwt.strategy'
       inject: [ConfigService],
       global: true,
       useFactory(config: ConfigService<Env, true>) {
-        const privateKey = config.get('JWT_PRIVATE_KEY', { infer: true })
-        const publicKey = config.get('JWT_PUBLIC_KEY', { infer: true })
+        const privateKey = config.get("JWT_PRIVATE_KEY", { infer: true })
+        const publicKey = config.get("JWT_PUBLIC_KEY", { infer: true })
 
         return {
-          signOptions: { algorithm: 'RS256' },
-          privateKey: Buffer.from(privateKey, 'base64'),
-          publicKey: Buffer.from(publicKey, 'base64'),
+          signOptions: { algorithm: "RS256" },
+          privateKey: Buffer.from(privateKey, "base64"),
+          publicKey: Buffer.from(publicKey, "base64"),
         }
       },
     }),
   ],
-  providers: [JWTStrategy],
+  providers: [
+    JWTStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JWTAuthGuard,
+    },
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}

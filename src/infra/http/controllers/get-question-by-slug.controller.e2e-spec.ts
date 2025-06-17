@@ -1,7 +1,6 @@
 import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug"
 import { AppModule } from "@/infra/app.module"
 import { DatabaseModule } from "@/infra/database/database.module"
-import { PrismaService } from "@/infra/database/prisma/prisma.service"
 import { INestApplication } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { Test } from "@nestjs/testing"
@@ -11,10 +10,10 @@ import { StudentFactory } from "test/factories/make-student"
 
 describe("Get question by slug (E2E)", () => {
   let app: INestApplication
-  let jwt: JwtService
-  let prisma: PrismaService
+
   let studentFactory: StudentFactory
   let questionFactory: QuestionFactory
+  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -24,10 +23,9 @@ describe("Get question by slug (E2E)", () => {
 
     app = moduleRef.createNestApplication()
 
-    jwt = moduleRef.get<JwtService>(JwtService)
-    prisma = moduleRef.get<PrismaService>(PrismaService)
     studentFactory = moduleRef.get<StudentFactory>(StudentFactory)
     questionFactory = moduleRef.get<QuestionFactory>(QuestionFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })

@@ -2,7 +2,7 @@ import { Either, left, right } from "@/core/either"
 
 // EXTERNAL DEPENDENCY
 import { Injectable } from "@nestjs/common"
-import { InvalidAttachmentError } from "./errors/invalid-attachment.error"
+import { InvalidAttachmentTypeError } from "./errors/invalid-attachment.error"
 import { Attachment } from "../../enterprise/entities/attachment"
 import { AttachmentsRepository } from "../repositories/attachments.repository"
 import { Uploader } from "@/domain/forum/application/storage/uploader"
@@ -14,7 +14,7 @@ interface UploadAndCreateAttachmentUseCaseRequest {
 }
 
 type UploadAndCreateAttachmentUseCaseResponse = Either<
-  InvalidAttachmentError,
+  InvalidAttachmentTypeError,
   { attachment: Attachment }
 >
 
@@ -33,7 +33,7 @@ export class UploadAndCreateAttachmentUseCase {
     const isAvailableMimeType = /^(image\/(jpeg|png))$|^application\/pdf$/
 
     if (!isAvailableMimeType.test(fileType)) {
-      return left(new InvalidAttachmentError(fileType))
+      return left(new InvalidAttachmentTypeError(fileType))
     }
 
     const { url } = await this.uploader.upload({
@@ -54,4 +54,3 @@ export class UploadAndCreateAttachmentUseCase {
     })
   }
 }
-

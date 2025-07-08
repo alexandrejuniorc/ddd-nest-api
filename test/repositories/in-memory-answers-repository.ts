@@ -1,8 +1,8 @@
-import { DomainEvents } from '@/core/events/domain-events'
-import { PaginationParams } from '@/core/repositories/pagination-params'
-import { AnswerAttachmentsRepository } from '@/domain/forum/application/repositories/answer-attachments-repository'
-import { AnswersRepository } from '@/domain/forum/application/repositories/answers-repository'
-import { Answer } from '@/domain/forum/enterprise/entities/answer'
+import { DomainEvents } from "@/core/events/domain-events"
+import { PaginationParams } from "@/core/repositories/pagination-params"
+import { AnswerAttachmentsRepository } from "@/domain/forum/application/repositories/answer-attachments-repository"
+import { AnswersRepository } from "@/domain/forum/application/repositories/answers-repository"
+import { Answer } from "@/domain/forum/enterprise/entities/answer"
 
 export class InMemoryAnswersRepository implements AnswersRepository {
   public items: Answer[] = []
@@ -14,19 +14,27 @@ export class InMemoryAnswersRepository implements AnswersRepository {
   async create(answer: Answer) {
     this.items.push(answer)
 
+    await this.answerAttachmentsRepository.createMany(
+      answer.attachments.getItems(),
+    )
+
     DomainEvents.dispatchEventsForAggregate(answer.id)
   }
 
   async save(answer: Answer): Promise<void> {
     const answerIndex = this.items.findIndex((item) => item.id === answer.id)
 
-    if (answerIndex >= 0) {
-      this.items[answerIndex] = answer
+    this.items[answerIndex] = answer
 
-      DomainEvents.dispatchEventsForAggregate(answer.id)
-    } else {
-      this.items.push(answer)
-    }
+    await this.answerAttachmentsRepository.createMany(
+      answer.attachments.getNewItems(),
+    )
+
+    await this.answerAttachmentsRepository.deleteMany(
+      answer.attachments.getRemovedItems(),
+    )
+
+    DomainEvents.dispatchEventsForAggregate(answer.id)
   }
 
   async findById(answerId: string): Promise<Answer | null> {

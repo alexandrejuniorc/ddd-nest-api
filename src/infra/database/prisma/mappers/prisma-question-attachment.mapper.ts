@@ -17,6 +17,7 @@ export class PrismaQuestionAttachmentMapper {
       new UniqueEntityID(raw.id),
     )
   }
+
   static toPrismaUpdateMany(
     attachments: QuestionAttachment[],
   ): Prisma.AttachmentUpdateManyArgs {

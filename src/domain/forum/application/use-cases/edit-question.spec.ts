@@ -92,9 +92,7 @@ describe("Edit Question", () => {
 
   it("should sync new and removed attachments when editing a question", async () => {
     const newQuestion = makeQuestion(
-      {
-        authorId: new UniqueEntityID("author-1"),
-      },
+      { authorId: new UniqueEntityID("author-1") },
       new UniqueEntityID("question-1"),
     )
 
@@ -111,17 +109,6 @@ describe("Edit Question", () => {
       }),
     )
 
-    console.log(
-      "Before edit:",
-      inMemoryQuestionAttachmentsRepository.items.length,
-    )
-    console.log(
-      "Attachments before:",
-      inMemoryQuestionAttachmentsRepository.items.map((item) =>
-        item.attachmentId.toString(),
-      ),
-    )
-
     const result = await sut.execute({
       questionId: newQuestion.id.toValue(),
       authorId: "author-1",
@@ -129,17 +116,6 @@ describe("Edit Question", () => {
       content: "New question content",
       attachmentsIds: ["1", "3"],
     })
-
-    console.log(
-      "After edit:",
-      inMemoryQuestionAttachmentsRepository.items.length,
-    )
-    console.log(
-      "Attachments after:",
-      inMemoryQuestionAttachmentsRepository.items.map((item) =>
-        item.attachmentId.toString(),
-      ),
-    )
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryQuestionAttachmentsRepository.items).toHaveLength(2)

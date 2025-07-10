@@ -12,16 +12,10 @@ let sut: EditAnswerUseCase // SUT -> System Under Test
 
 describe("Edit Answer", () => {
   beforeEach(() => {
-    inMemoryAnswerAttachmentsRepository =
-      new InMemoryAnswerAttachmentsRepository()
-    inMemoryAnswersRepository = new InMemoryAnswersRepository(
-      inMemoryAnswerAttachmentsRepository,
-    )
+    inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository()
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswerAttachmentsRepository)
 
-    sut = new EditAnswerUseCase(
-      inMemoryAnswersRepository,
-      inMemoryAnswerAttachmentsRepository,
-    )
+    sut = new EditAnswerUseCase(inMemoryAnswersRepository, inMemoryAnswerAttachmentsRepository)
   })
 
   it("should be able to edit a answer", async () => {
@@ -55,15 +49,11 @@ describe("Edit Answer", () => {
     expect(inMemoryAnswersRepository.items[0]).toMatchObject({
       content: "New answer content",
     })
-    expect(
-      inMemoryAnswersRepository.items[0].attachments.currentItems,
-    ).toHaveLength(2)
-    expect(inMemoryAnswersRepository.items[0].attachments.currentItems).toEqual(
-      [
-        expect.objectContaining({ attachmentId: new UniqueEntityID("1") }),
-        expect.objectContaining({ attachmentId: new UniqueEntityID("3") }),
-      ],
-    )
+    expect(inMemoryAnswersRepository.items[0].attachments.currentItems).toHaveLength(2)
+    expect(inMemoryAnswersRepository.items[0].attachments.currentItems).toEqual([
+      expect.objectContaining({ attachmentId: new UniqueEntityID("1") }),
+      expect.objectContaining({ attachmentId: new UniqueEntityID("3") }),
+    ])
   })
 
   it("should not be able to edit a answer from another user", async () => {

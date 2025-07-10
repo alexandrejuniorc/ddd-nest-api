@@ -9,11 +9,8 @@ let sut: AnswerQuestionUseCase // SUT -> System Under Test
 
 describe("Create Answer", () => {
   beforeEach(() => {
-    inMemoryAnswerAttachmentsRepository =
-      new InMemoryAnswerAttachmentsRepository()
-    inMemoryAnswersRepository = new InMemoryAnswersRepository(
-      inMemoryAnswerAttachmentsRepository,
-    )
+    inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository()
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswerAttachmentsRepository)
 
     sut = new AnswerQuestionUseCase(inMemoryAnswersRepository)
   })
@@ -28,15 +25,11 @@ describe("Create Answer", () => {
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryAnswersRepository.items[0]).toEqual(result.value?.answer)
-    expect(
-      inMemoryAnswersRepository.items[0].attachments.currentItems,
-    ).toHaveLength(2)
-    expect(inMemoryAnswersRepository.items[0].attachments.currentItems).toEqual(
-      [
-        expect.objectContaining({ attachmentId: new UniqueEntityID("1") }),
-        expect.objectContaining({ attachmentId: new UniqueEntityID("2") }),
-      ],
-    )
+    expect(inMemoryAnswersRepository.items[0].attachments.currentItems).toHaveLength(2)
+    expect(inMemoryAnswersRepository.items[0].attachments.currentItems).toEqual([
+      expect.objectContaining({ attachmentId: new UniqueEntityID("1") }),
+      expect.objectContaining({ attachmentId: new UniqueEntityID("2") }),
+    ])
   })
 
   it("should persist attachments when creating a new answer", async () => {

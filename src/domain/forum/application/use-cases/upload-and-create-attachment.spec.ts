@@ -11,10 +11,8 @@ describe("Upload and create attachment", () => {
   beforeEach(() => {
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
     fakeUploader = new FakeUploader()
-    sut = new UploadAndCreateAttachmentUseCase(
-      inMemoryAttachmentsRepository,
-      fakeUploader,
-    )
+
+    sut = new UploadAndCreateAttachmentUseCase(inMemoryAttachmentsRepository, fakeUploader)
   })
 
   it("should be able to upload and create an attachment", async () => {
@@ -29,9 +27,7 @@ describe("Upload and create attachment", () => {
       attachment: inMemoryAttachmentsRepository.items[0],
     })
     expect(fakeUploader.uploads).toHaveLength(1)
-    expect(fakeUploader.uploads[0]).toEqual(
-      expect.objectContaining({ fileName: "example.png" }),
-    )
+    expect(fakeUploader.uploads[0]).toEqual(expect.objectContaining({ fileName: "example.png" }))
   })
 
   it("should not be able to upload an attachment with invalid file type", async () => {
@@ -45,4 +41,3 @@ describe("Upload and create attachment", () => {
     expect(result.value).toBeInstanceOf(InvalidAttachmentTypeError)
   })
 })
-

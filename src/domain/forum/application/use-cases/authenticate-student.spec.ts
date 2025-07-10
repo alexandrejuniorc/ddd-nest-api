@@ -16,11 +16,7 @@ describe("Authenticate Student", () => {
     fakeHasher = new FakeHasher()
     fakeEncrypter = new FakeEncrypter()
 
-    sut = new AuthenticateStudentUseCase(
-      inMemoryStudentsRepository,
-      fakeHasher,
-      fakeEncrypter,
-    )
+    sut = new AuthenticateStudentUseCase(inMemoryStudentsRepository, fakeHasher, fakeEncrypter)
   })
 
   it("should be able to authenticate a student", async () => {

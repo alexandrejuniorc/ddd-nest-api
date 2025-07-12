@@ -1,7 +1,7 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Question } from "@/domain/forum/enterprise/entities/question"
-import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug"
-import { Question as PrismaQuestion, type Prisma } from "@prisma/client"
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Question } from '@/domain/forum/enterprise/entities/question'
+import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
+import { Question as PrismaQuestion, type Prisma } from '@prisma/client'
 
 export class PrismaQuestionMapper {
   // Prisma to Domain Mapper for Question Entity

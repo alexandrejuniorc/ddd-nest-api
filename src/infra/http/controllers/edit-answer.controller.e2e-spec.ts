@@ -1,17 +1,17 @@
-import { AppModule } from "@/infra/app.module"
-import { DatabaseModule } from "@/infra/database/database.module"
-import { PrismaService } from "@/infra/database/prisma/prisma.service"
-import { INestApplication } from "@nestjs/common"
-import { JwtService } from "@nestjs/jwt"
-import { Test } from "@nestjs/testing"
-import request from "supertest"
-import { AnswerFactory } from "test/factories/make-answer"
-import { AnswerAttachmentFactory } from "test/factories/make-answer-attachment"
-import { AttachmentFactory } from "test/factories/make-attachment"
-import { QuestionFactory } from "test/factories/make-question"
-import { StudentFactory } from "test/factories/make-student"
+import { AppModule } from '@/infra/app.module'
+import { DatabaseModule } from '@/infra/database/database.module'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { INestApplication } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
+import { AnswerFactory } from 'test/factories/make-answer'
+import { AnswerAttachmentFactory } from 'test/factories/make-answer-attachment'
+import { AttachmentFactory } from 'test/factories/make-attachment'
+import { QuestionFactory } from 'test/factories/make-question'
+import { StudentFactory } from 'test/factories/make-student'
 
-describe("Edit answer (E2E)", () => {
+describe('Edit answer (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let studentFactory: StudentFactory
@@ -48,7 +48,7 @@ describe("Edit answer (E2E)", () => {
     await app.init()
   })
 
-  test("[PUT] /answers/:answerId/", async () => {
+  test('[PUT] /answers/:answerId/', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const accessToken = jwt.sign({ sub: user.id.toString() })
@@ -81,16 +81,16 @@ describe("Edit answer (E2E)", () => {
 
     const response = await request(app.getHttpServer())
       .put(`/answers/${answerId}`)
-      .set("Authorization", `Bearer ${accessToken}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        content: "New answer content",
+        content: 'New answer content',
         attachments: [attachment1.id.toString(), attachment3.id.toString()],
       })
 
     expect(response.statusCode).toBe(204)
 
     const answerOnDatabase = await prisma.answer.findFirst({
-      where: { content: "New answer content" },
+      where: { content: 'New answer content' },
     })
 
     expect(answerOnDatabase).toBeTruthy()

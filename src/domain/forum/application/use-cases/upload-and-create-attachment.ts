@@ -1,11 +1,11 @@
-import { Either, left, right } from "@/core/either"
+import { Either, left, right } from '@/core/either'
 
 // EXTERNAL DEPENDENCY
-import { Injectable } from "@nestjs/common"
-import { InvalidAttachmentTypeError } from "./errors/invalid-attachment.error"
-import { Attachment } from "../../enterprise/entities/attachment"
-import { AttachmentsRepository } from "../repositories/attachments.repository"
-import { Uploader } from "@/domain/forum/application/storage/uploader"
+import { Injectable } from '@nestjs/common'
+import { InvalidAttachmentTypeError } from './errors/invalid-attachment.error'
+import { Attachment } from '../../enterprise/entities/attachment'
+import { AttachmentsRepository } from '../repositories/attachments.repository'
+import { Uploader } from '@/domain/forum/application/storage/uploader'
 
 interface UploadAndCreateAttachmentUseCaseRequest {
   fileName: string

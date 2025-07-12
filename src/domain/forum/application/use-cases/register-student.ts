@@ -1,11 +1,11 @@
-import { StudentsRepository } from "../repositories/students-repository"
-import { Either, left, right } from "@/core/either"
-import { Student } from "../../enterprise/entities/student"
-import { HashGenerator } from "../cryptography/hash-generator"
-import { StudentAlreadyExistsError } from "./errors/student-already-exists.error"
+import { StudentsRepository } from '../repositories/students-repository'
+import { Either, left, right } from '@/core/either'
+import { Student } from '../../enterprise/entities/student'
+import { HashGenerator } from '../cryptography/hash-generator'
+import { StudentAlreadyExistsError } from './errors/student-already-exists.error'
 
 // EXTERNAL DEPENDENCY
-import { Injectable } from "@nestjs/common"
+import { Injectable } from '@nestjs/common'
 
 interface RegisterStudentUseCaseRequest {
   name: string

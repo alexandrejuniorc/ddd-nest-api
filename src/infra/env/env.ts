@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod'
 
 export const envSchema = z.object({
   PORT: z.coerce.number().optional().default(3333),

@@ -4,12 +4,12 @@ import {
   Controller,
   Param,
   Post,
-} from "@nestjs/common"
-import { CurrentUser } from "@/infra/auth/current-user.decorator"
-import { UserPayload } from "@/infra/auth/jwt.strategy"
-import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe"
-import { z } from "zod"
-import { CommentOnQuestionUseCase } from "@/domain/forum/application/use-cases/comment-on-question"
+} from '@nestjs/common'
+import { CurrentUser } from '@/infra/auth/current-user.decorator'
+import { UserPayload } from '@/infra/auth/jwt.strategy'
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import { z } from 'zod'
+import { CommentOnQuestionUseCase } from '@/domain/forum/application/use-cases/comment-on-question'
 
 const commentOnQuestionBodySchema = z.object({
   content: z.string(),
@@ -19,7 +19,7 @@ const bodyValidationPipe = new ZodValidationPipe(commentOnQuestionBodySchema)
 
 type CommentOnQuestionBodySchema = z.infer<typeof commentOnQuestionBodySchema>
 
-@Controller("/questions/:questionId/comments")
+@Controller('/questions/:questionId/comments')
 export class CommentOnQuestionController {
   constructor(private commentOnQuestion: CommentOnQuestionUseCase) {}
 
@@ -27,7 +27,7 @@ export class CommentOnQuestionController {
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(bodyValidationPipe) body: CommentOnQuestionBodySchema,
-    @Param("questionId") questionId: string,
+    @Param('questionId') questionId: string,
   ) {
     const { content } = body
     const userId = user.sub

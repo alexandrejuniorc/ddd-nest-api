@@ -1,16 +1,16 @@
-import { AppModule } from "@/infra/app.module"
-import { DatabaseModule } from "@/infra/database/database.module"
-import { PrismaService } from "@/infra/database/prisma/prisma.service"
-import { INestApplication } from "@nestjs/common"
-import { JwtService } from "@nestjs/jwt"
-import { Test } from "@nestjs/testing"
-import request from "supertest"
-import { AttachmentFactory } from "test/factories/make-attachment"
-import { QuestionFactory } from "test/factories/make-question"
-import { QuestionAttachmentFactory } from "test/factories/make-question-attachment"
-import { StudentFactory } from "test/factories/make-student"
+import { AppModule } from '@/infra/app.module'
+import { DatabaseModule } from '@/infra/database/database.module'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { INestApplication } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
+import { AttachmentFactory } from 'test/factories/make-attachment'
+import { QuestionFactory } from 'test/factories/make-question'
+import { QuestionAttachmentFactory } from 'test/factories/make-question-attachment'
+import { StudentFactory } from 'test/factories/make-student'
 
-describe("Edit question (E2E)", () => {
+describe('Edit question (E2E)', () => {
   let app: INestApplication
   let studentFactory: StudentFactory
   let questionFactory: QuestionFactory
@@ -44,7 +44,7 @@ describe("Edit question (E2E)", () => {
     await app.init()
   })
 
-  test("[PUT] /questions/:id", async () => {
+  test('[PUT] /questions/:id', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const accessToken = jwt.sign({ sub: user.id.toString() })
@@ -72,17 +72,17 @@ describe("Edit question (E2E)", () => {
 
     const response = await request(app.getHttpServer())
       .put(`/questions/${questionId}`)
-      .set("Authorization", `Bearer ${accessToken}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        title: "New title",
-        content: "New content",
+        title: 'New title',
+        content: 'New content',
         attachments: [attachment1.id.toString(), attachment3.id.toString()],
       })
 
     expect(response.statusCode).toBe(204)
 
     const questionOnDatabase = await prisma.question.findFirst({
-      where: { title: "New title", content: "New content" },
+      where: { title: 'New title', content: 'New content' },
     })
 
     expect(questionOnDatabase).toBeTruthy()

@@ -1,8 +1,8 @@
 import {
   Uploader,
   UploadParams,
-} from "@/domain/forum/application/storage/uploader"
-import { randomUUID } from "node:crypto"
+} from '@/domain/forum/application/storage/uploader'
+import { randomUUID } from 'node:crypto'
 
 interface Upload {
   fileName: string
@@ -23,4 +23,3 @@ export class FakeUploader implements Uploader {
     return { url }
   }
 }
-

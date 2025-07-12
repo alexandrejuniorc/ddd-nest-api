@@ -1,6 +1,6 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Student } from "@/domain/forum/enterprise/entities/student"
-import { User as PrismaUser, Prisma } from "@prisma/client"
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Student } from '@/domain/forum/enterprise/entities/student'
+import { User as PrismaUser, Prisma } from '@prisma/client'
 
 export class PrismaStudentMapper {
   // Prisma to Domain Mapper for Student Entity

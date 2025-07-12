@@ -1,13 +1,13 @@
-import { Either, left, right } from "@/core/either"
-import { Answer } from "../../enterprise/entities/answer"
-import { AnswersRepository } from "../repositories/answers-repository"
-import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error"
-import { NotAllowedError } from "@/core/errors/errors/not-allowed-error"
-import { AnswerAttachmentList } from "../../enterprise/entities/answer-attachment-list"
-import { AnswerAttachment } from "../../enterprise/entities/answer-attachment"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { AnswerAttachmentsRepository } from "../repositories/answer-attachments-repository"
-import { Injectable } from "@nestjs/common"
+import { Either, left, right } from '@/core/either'
+import { Answer } from '../../enterprise/entities/answer'
+import { AnswersRepository } from '../repositories/answers-repository'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachment-list'
+import { AnswerAttachment } from '../../enterprise/entities/answer-attachment'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { AnswerAttachmentsRepository } from '../repositories/answer-attachments-repository'
+import { Injectable } from '@nestjs/common'
 
 interface EditAnswerUseCaseRequest {
   authorId: string

@@ -4,16 +4,16 @@ import {
   Get,
   Param,
   Query,
-} from "@nestjs/common"
-import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe"
-import { z } from "zod"
-import { FetchQuestionAnswersUseCase } from "@/domain/forum/application/use-cases/fetch-question-answers"
-import { HTTPAnswerPresenter } from "../presenters/http-answer.presenter"
+} from '@nestjs/common'
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import { z } from 'zod'
+import { FetchQuestionAnswersUseCase } from '@/domain/forum/application/use-cases/fetch-question-answers'
+import { HTTPAnswerPresenter } from '../presenters/http-answer.presenter'
 
 const pageQueryParamsSchema = z
   .string()
   .optional()
-  .default("1")
+  .default('1')
   .transform(Number)
   .pipe(z.number().min(1))
 
@@ -21,14 +21,14 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamsSchema)
 
 type PageQueryParamsSchema = z.infer<typeof pageQueryParamsSchema>
 
-@Controller("/questions/:questionId/answers")
+@Controller('/questions/:questionId/answers')
 export class FetchQuestionAnswersController {
   constructor(private fetchQuestionAnswers: FetchQuestionAnswersUseCase) {}
 
   @Get()
   async handle(
-    @Query("page", queryValidationPipe) page: PageQueryParamsSchema,
-    @Param("questionId") questionId: string,
+    @Query('page', queryValidationPipe) page: PageQueryParamsSchema,
+    @Param('questionId') questionId: string,
   ) {
     const result = await this.fetchQuestionAnswers.execute({ page, questionId })
 

@@ -1,11 +1,11 @@
-import { DomainEvents } from "@/core/events/domain-events"
-import { PaginationParams } from "@/core/repositories/pagination-params"
-import { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository"
-import { Question } from "@/domain/forum/enterprise/entities/question"
-import { QuestionDetails } from "@/domain/forum/enterprise/entities/value-objects/question-details"
-import { InMemoryAttachmentsRepository } from "./in-memory-attachments-repository"
-import { InMemoryQuestionAttachmentsRepository } from "./in-memory-question-attachments-repository"
-import { InMemoryStudentsRepository } from "./in-memory-students-repository"
+import { DomainEvents } from '@/core/events/domain-events'
+import { PaginationParams } from '@/core/repositories/pagination-params'
+import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
+import { Question } from '@/domain/forum/enterprise/entities/question'
+import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
+import { InMemoryAttachmentsRepository } from './in-memory-attachments-repository'
+import { InMemoryQuestionAttachmentsRepository } from './in-memory-question-attachments-repository'
+import { InMemoryStudentsRepository } from './in-memory-students-repository'
 
 export class InMemoryQuestionsRepository implements QuestionsRepository {
   public items: Question[] = []

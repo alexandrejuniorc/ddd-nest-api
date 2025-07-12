@@ -1,16 +1,16 @@
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository"
-import { FetchAnswerCommentsUseCase } from "./fetch-answer-comments"
-import { makeAnswerComment } from "test/factories/make-answer-comment"
-import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository"
-import { makeStudent } from "test/factories/make-student"
+import { InMemoryAnswerCommentsRepository } from 'test/repositories/in-memory-answer-comments-repository'
+import { FetchAnswerCommentsUseCase } from './fetch-answer-comments'
+import { makeAnswerComment } from 'test/factories/make-answer-comment'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
+import { makeStudent } from 'test/factories/make-student'
 
 let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
 let sut: FetchAnswerCommentsUseCase // SUT -> System Under Test
 
-describe("Fetch Answer Comments", () => {
+describe('Fetch Answer Comments', () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
@@ -19,23 +19,23 @@ describe("Fetch Answer Comments", () => {
     sut = new FetchAnswerCommentsUseCase(inMemoryAnswerCommentsRepository)
   })
 
-  it("should be able to fetch answer comments", async () => {
-    const student = makeStudent({ name: "John Doe" })
+  it('should be able to fetch answer comments', async () => {
+    const student = makeStudent({ name: 'John Doe' })
 
     inMemoryStudentsRepository.items.push(student)
 
     const comment1 = makeAnswerComment({
-      answerId: new UniqueEntityID("question-1"),
+      answerId: new UniqueEntityID('question-1'),
       authorId: student.id,
     })
 
     const comment2 = makeAnswerComment({
-      answerId: new UniqueEntityID("question-1"),
+      answerId: new UniqueEntityID('question-1'),
       authorId: student.id,
     })
 
     const comment3 = makeAnswerComment({
-      answerId: new UniqueEntityID("question-1"),
+      answerId: new UniqueEntityID('question-1'),
       authorId: student.id,
     })
 
@@ -44,7 +44,7 @@ describe("Fetch Answer Comments", () => {
     await inMemoryAnswerCommentsRepository.create(comment3)
 
     const result = await sut.execute({
-      answerId: "question-1",
+      answerId: 'question-1',
       page: 1,
     })
 
@@ -52,37 +52,37 @@ describe("Fetch Answer Comments", () => {
     expect(result.value?.comments).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          authorName: "John Doe",
+          authorName: 'John Doe',
           commentId: comment1.id,
         }),
         expect.objectContaining({
-          authorName: "John Doe",
+          authorName: 'John Doe',
           commentId: comment2.id,
         }),
         expect.objectContaining({
-          authorName: "John Doe",
+          authorName: 'John Doe',
           commentId: comment3.id,
         }),
       ]),
     )
   })
 
-  it("should be able to fetch paginated question answers", async () => {
-    const student = makeStudent({ name: "John Doe" })
+  it('should be able to fetch paginated question answers', async () => {
+    const student = makeStudent({ name: 'John Doe' })
 
     inMemoryStudentsRepository.items.push(student)
 
     for (let i = 1; i <= 22; i++) {
       await inMemoryAnswerCommentsRepository.create(
         makeAnswerComment({
-          answerId: new UniqueEntityID("question-1"),
+          answerId: new UniqueEntityID('question-1'),
           authorId: student.id,
         }),
       )
     }
 
     const result = await sut.execute({
-      answerId: "question-1",
+      answerId: 'question-1',
       page: 2,
     })
 

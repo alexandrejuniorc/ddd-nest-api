@@ -1,25 +1,28 @@
-import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository"
-import { UploadAndCreateAttachmentUseCase } from "./upload-and-create-attachment"
-import { FakeUploader } from "test/storage/fake-uploader"
-import { InvalidAttachmentTypeError } from "./errors/invalid-attachment.error"
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { UploadAndCreateAttachmentUseCase } from './upload-and-create-attachment'
+import { FakeUploader } from 'test/storage/fake-uploader'
+import { InvalidAttachmentTypeError } from './errors/invalid-attachment.error'
 
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
 let fakeUploader: FakeUploader
 let sut: UploadAndCreateAttachmentUseCase // SUT -> System Under Test
 
-describe("Upload and create attachment", () => {
+describe('Upload and create attachment', () => {
   beforeEach(() => {
     inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
     fakeUploader = new FakeUploader()
 
-    sut = new UploadAndCreateAttachmentUseCase(inMemoryAttachmentsRepository, fakeUploader)
+    sut = new UploadAndCreateAttachmentUseCase(
+      inMemoryAttachmentsRepository,
+      fakeUploader,
+    )
   })
 
-  it("should be able to upload and create an attachment", async () => {
+  it('should be able to upload and create an attachment', async () => {
     const result = await sut.execute({
-      fileName: "example.png",
-      fileType: "image/png",
-      body: Buffer.from("fake image content"),
+      fileName: 'example.png',
+      fileType: 'image/png',
+      body: Buffer.from('fake image content'),
     })
 
     expect(result.isRight()).toBe(true)
@@ -27,14 +30,16 @@ describe("Upload and create attachment", () => {
       attachment: inMemoryAttachmentsRepository.items[0],
     })
     expect(fakeUploader.uploads).toHaveLength(1)
-    expect(fakeUploader.uploads[0]).toEqual(expect.objectContaining({ fileName: "example.png" }))
+    expect(fakeUploader.uploads[0]).toEqual(
+      expect.objectContaining({ fileName: 'example.png' }),
+    )
   })
 
-  it("should not be able to upload an attachment with invalid file type", async () => {
+  it('should not be able to upload an attachment with invalid file type', async () => {
     const result = await sut.execute({
-      fileName: "music.mp3",
-      fileType: "audio/mpeg",
-      body: Buffer.from(""),
+      fileName: 'music.mp3',
+      fileType: 'audio/mpeg',
+      body: Buffer.from(''),
     })
 
     expect(result.isLeft()).toBe(true)

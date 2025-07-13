@@ -1,12 +1,13 @@
-import { PaginationParams } from '@/core/repositories/pagination-params'
-import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
-import { Question } from '@/domain/forum/enterprise/entities/question'
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma.service'
-import { PrismaQuestionMapper } from '../mappers/prisma-question.mapper'
-import { QuestionAttachmentsRepository } from '@/domain/forum/application/repositories/question-attachments-repository'
-import type { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
-import { PrismaQuestionDetailsMapper } from '../mappers/prisma-question-details.mapper'
+import { PaginationParams } from "@/core/repositories/pagination-params"
+import { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository"
+import { Question } from "@/domain/forum/enterprise/entities/question"
+import { Injectable } from "@nestjs/common"
+import { PrismaService } from "../prisma.service"
+import { PrismaQuestionMapper } from "../mappers/prisma-question.mapper"
+import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository"
+import { QuestionDetails } from "@/domain/forum/enterprise/entities/value-objects/question-details"
+import { PrismaQuestionDetailsMapper } from "../mappers/prisma-question-details.mapper"
+import { DomainEvents } from "@/core/events/domain-events"
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
@@ -57,7 +58,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 
   async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
     const questions = await this.prisma.question.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       take: 20,
       skip: (page - 1) * 20,
     })
@@ -72,9 +73,9 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       data,
     })
 
-    await this.questionAttachmentsRepository.createMany(
-      question.attachments.getItems(),
-    )
+    await this.questionAttachmentsRepository.createMany(question.attachments.getItems())
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
 
   async save(question: Question): Promise<void> {
@@ -85,13 +86,11 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         where: { id: data.id },
         data,
       }),
-      this.questionAttachmentsRepository.createMany(
-        question.attachments.getItems(),
-      ),
-      this.questionAttachmentsRepository.deleteMany(
-        question.attachments.getRemovedItems(),
-      ),
+      this.questionAttachmentsRepository.createMany(question.attachments.getItems()),
+      this.questionAttachmentsRepository.deleteMany(question.attachments.getRemovedItems()),
     ])
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
 
   async delete(question: Question): Promise<void> {

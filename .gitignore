@@ -62,3 +62,4 @@ data
 
 # Env
 .env*
+!.env.example
